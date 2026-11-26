@@ -10,9 +10,9 @@ app embeds. Four device frameworks belong here and none of them are in git:
 | `FacePPlugin.framework` | Vendor runtime — ios-arm64 slice inside `FacePlugin.xcframework` |
 | `FaceDetect.framework` | Vendor detector (ios-arm64 slice) |
 
-Get them from
-[Face-LivenessDetection-iOS](https://github.com/Faceplugin-ltd/Face-LivenessDetection-iOS)
-(or copy the xcframeworks and extract the `ios-arm64` slices). `python run_ios` copies the slices
+Get them from the
+[FaceRecognition-LivenessDetection-iOS release](https://github.com/Faceplugin-ltd/FaceRecognition-LivenessDetection-iOS/releases/tag/latest)
+(`runtime.zip` — unzip, then extract the `ios-arm64` slices from the xcframeworks). `python run_ios` copies the slices
 automatically when the xcframeworks are present.
 
 The plugin's `hooks/ios_prepare.js` fails with a named list if any of them is absent, so a
