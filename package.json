@@ -1,0 +1,53 @@
+{
+  "name": "face-liveness-cordova-demo",
+  "version": "0.2.0",
+  "private": true,
+  "description": "FacePlugin Face Liveness Cordova demo",
+  "author": "FacePlugin <info@faceplugin.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc && vite build",
+    "ionic:build": "npm run build",
+    "dev": "vite",
+    "typecheck": "tsc --noEmit && tsc -p FacePlugin/tsconfig.json --noEmit",
+    "plugin:build": "tsc -p FacePlugin/tsconfig.json",
+    "postinstall": "npm run plugin:build",
+    "ensure-gradle": "node scripts/ensure-gradle.js",
+    "setup:android": "node scripts/with-gradle.js node scripts/setup-android.js",
+    "setup:ios": "node scripts/setup-ios.js",
+    "android": "npm run build && node scripts/with-gradle.js npx cordova prepare android && node scripts/with-gradle.js npx cordova run android --device",
+    "ios": "npm run build && npx cordova prepare ios && npx cordova run ios --device"
+  },
+  "dependencies": {
+    "@ionic/react": "^8.4.1",
+    "@ionic/react-router": "^8.4.1",
+    "history": "^5.3.0",
+    "ionicons": "^7.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^5.3.4",
+    "react-router-dom": "^5.3.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-router": "^5.1.20",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "cordova": "^12.0.0",
+    "cordova-android": "^13.0.0",
+    "cordova-ios": "^8.1.1",
+    "face-liveness-cordova": "file:FacePlugin",
+    "typescript": "~5.4.5",
+    "vite": "^5.4.11"
+  },
+  "cordova": {
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "plugins": {
+      "face-liveness-cordova": {}
+    }
+  }
+}

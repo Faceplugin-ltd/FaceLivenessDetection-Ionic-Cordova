@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="face-liveness-cordova"
+        version="0.2.0">
+  <name>FaceLivenessSdk</name>
+  <description>FacePlugin Face Liveness SDK for Cordova (Android + iOS)</description>
+  <license>MIT</license>
+  <keywords>cordova,ionic,face-liveness,liveness,anti-spoofing,faceplugin</keywords>
+
+  <!--
+    The plugin launches the NATIVE liveness screens. The Kotlin and Swift sources below are
+    vendored from Face-LivenessDetection-Android / -iOS by scripts/sync_liveness_native.py, so the
+    camera preview, the anti-spoofing gate, the challenge sequence and the result card are the
+    same code the native apps run.
+  -->
+
+  <js-module src="www/FaceLivenessSdk.js" name="FaceLivenessSdk">
+    <clobbers target="cordova.plugins.FaceLivenessSdk" />
+  </js-module>
+
+  <hook type="after_prepare" src="hooks/android_prepare.js" />
+  <hook type="before_build" src="hooks/android_prepare.js" />
+  <hook type="before_run" src="hooks/android_prepare.js" />
+  <hook type="after_prepare" src="hooks/ios_prepare.js" />
+  <hook type="before_build" src="hooks/ios_prepare.js" />
+  <hook type="before_run" src="hooks/ios_prepare.js" />
+
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="FaceLivenessSdk">
+        <param name="android-package" value="com.faceplugin.face_liveness_sdk.FaceLivenessSdkPlugin"/>
+      </feature>
+      <preference name="AndroidXEnabled" value="true" />
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.CAMERA" />
+      <uses-feature android:name="android.hardware.camera" android:required="false" />
+    </config-file>
+
+    <!-- Both camera screens, with no action bar and locked to portrait, as in the native app. -->
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <activity
+        android:name="com.faceplugin.faceliveness.active.ActiveLivenessActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"
+        android:theme="@style/Theme.AppCompat.NoActionBar" />
+      <activity
+        android:name="com.faceplugin.face_liveness_sdk.passive.PassiveLivenessActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"
+        android:theme="@style/Theme.AppCompat.NoActionBar" />
+    </config-file>
+
+    <!-- The bridge, the vendored kit and active screen, and the passive-screen port. -->
+    <source-file src="src/android/java/com/faceplugin/face_liveness_sdk/FaceLivenessSdkPlugin.kt"
+                 target-dir="app/src/main/java/com/faceplugin/face_liveness_sdk" />
+    <source-file src="src/android/java/com/faceplugin/face_liveness_sdk/passive/PassiveFaceView.kt"
+                 target-dir="app/src/main/java/com/faceplugin/face_liveness_sdk/passive" />
+    <source-file src="src/android/java/com/faceplugin/face_liveness_sdk/passive/PassiveLivenessActivity.kt"
+                 target-dir="app/src/main/java/com/faceplugin/face_liveness_sdk/passive" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/active/ActiveCheck.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/active" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/active/ActiveLivenessActivity.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/active" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/active/ActiveLivenessOptions.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/active" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/active/ActiveLivenessResult.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/active" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/active/ActiveLivenessSession.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/active" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/active/FaceFrameOverlayView.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/active" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/kit/CameraFrameUtils.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/kit" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/kit/CameraPreview.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/kit" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/kit/DetectedFace.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/kit" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/kit/FaceEngine.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/kit" />
+    <source-file src="src/android/java/com/faceplugin/faceliveness/kit/LicenseStatus.kt"
+                 target-dir="app/src/main/java/com/faceplugin/faceliveness/kit" />
+
+    <!-- fp_al_* belong to the vendored active screen, fp_pl_* to the passive port. -->
+    <resource-file src="src/android/res/drawable/fp_al_bg_button.xml" target="res/drawable/fp_al_bg_button.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_bg_button_outline.xml" target="res/drawable/fp_al_bg_button_outline.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_bg_card.xml" target="res/drawable/fp_al_bg_card.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_bg_chip.xml" target="res/drawable/fp_al_bg_chip.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_bg_chip_flat.xml" target="res/drawable/fp_al_bg_chip_flat.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_bg_icon_circle.xml" target="res/drawable/fp_al_bg_icon_circle.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_bg_pill.xml" target="res/drawable/fp_al_bg_pill.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_bg_sheet.xml" target="res/drawable/fp_al_bg_sheet.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_blink.xml" target="res/drawable/fp_al_ic_blink.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_close.xml" target="res/drawable/fp_al_ic_close.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_closer.xml" target="res/drawable/fp_al_ic_closer.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_face.xml" target="res/drawable/fp_al_ic_face.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_fail.xml" target="res/drawable/fp_al_ic_fail.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_pass.xml" target="res/drawable/fp_al_ic_pass.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_retry.xml" target="res/drawable/fp_al_ic_retry.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_shield.xml" target="res/drawable/fp_al_ic_shield.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_smile.xml" target="res/drawable/fp_al_ic_smile.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_switch_camera.xml" target="res/drawable/fp_al_ic_switch_camera.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_turn_down.xml" target="res/drawable/fp_al_ic_turn_down.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_turn_left.xml" target="res/drawable/fp_al_ic_turn_left.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_turn_right.xml" target="res/drawable/fp_al_ic_turn_right.xml" />
+    <resource-file src="src/android/res/drawable/fp_al_ic_turn_up.xml" target="res/drawable/fp_al_ic_turn_up.xml" />
+    <resource-file src="src/android/res/layout/fp_al_activity.xml" target="res/layout/fp_al_activity.xml" />
+    <resource-file src="src/android/res/layout/fp_al_item_challenge.xml" target="res/layout/fp_al_item_challenge.xml" />
+    <resource-file src="src/android/res/layout/fp_pl_activity.xml" target="res/layout/fp_pl_activity.xml" />
+    <resource-file src="src/android/res/values/fp_al_colors.xml" target="res/values/fp_al_colors.xml" />
+    <resource-file src="src/android/res/values/fp_al_strings.xml" target="res/values/fp_al_strings.xml" />
+    <resource-file src="src/android/res/values/fp_pl_colors.xml" target="res/values/fp_pl_colors.xml" />
+    <resource-file src="src/android/res/values/fp_pl_strings.xml" target="res/values/fp_pl_strings.xml" />
+
+    <!--
+      The dependencies the vendored sources need. The engine AAR itself is copied in by
+      hooks/android_prepare.js, not listed here: it is too large for git, and the hook reports a
+      missing engine by name instead of failing plugin install with a missing-file error.
+    -->
+    <framework src="src/android/aarintegration.gradle" custom="true" type="gradleReference" />
+    <source-file src="src/android/build-extras.gradle" target-dir="app" />
+    <source-file src="src/android/faceplugin-proguard-rules.pro" target-dir="app" />
+  </platform>
+
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="FaceLivenessSdk">
+        <param name="ios-package" value="FaceLivenessSdkPlugin" />
+      </feature>
+    </config-file>
+
+    <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+      <string>The camera is used to check that a real person is in front of it.</string>
+    </config-file>
+
+    <!-- Cordova's plugin API is Objective-C; the Swift plugin reaches it through this header. -->
+    <header-file src="src/ios/FaceLivenessSdk-Bridging-Header.h" type="BridgingHeader" />
+
+    <source-file src="src/ios/FaceLivenessSdkPlugin.swift" />
+    <source-file src="src/ios/PluginSupport.swift" />
+    <source-file src="src/ios/ActiveLiveness/ActiveCheck.swift" />
+    <source-file src="src/ios/ActiveLiveness/ActiveLivenessOptions.swift" />
+    <source-file src="src/ios/ActiveLiveness/ActiveLivenessResult.swift" />
+    <source-file src="src/ios/ActiveLiveness/ActiveLivenessSession.swift" />
+    <source-file src="src/ios/ActiveLiveness/ActiveLivenessViewController.swift" />
+    <source-file src="src/ios/ActiveLiveness/FaceFrameOverlayView.swift" />
+    <source-file src="src/ios/FaceLivenessKit/Camera/CameraFrameUtils.swift" />
+    <source-file src="src/ios/FaceLivenessKit/Core/FaceLivenessQueue.swift" />
+    <source-file src="src/ios/FaceLivenessKit/Liveness/LiveDetect.swift" />
+    <source-file src="src/ios/FaceLivenessKit/Models/DetectedFace+Metrics.swift" />
+    <source-file src="src/ios/FaceLivenessKit/Models/FaceJSON.swift" />
+    <source-file src="src/ios/FaceLivenessKit/Models/FaceModels.swift" />
+    <source-file src="src/ios/FaceLivenessKit/Public/FaceLivenessClient.swift" />
+    <source-file src="src/ios/FaceLivenessKit/Public/LicenseStatus.swift" />
+    <source-file src="src/ios/Passive/BaseCameraViewController.swift" />
+    <source-file src="src/ios/Passive/FaceLivenessOverlayView.swift" />
+    <source-file src="src/ios/Passive/LivenessCameraViewController.swift" />
+
+    <!-- Device slices by framework name. FacePlugin.xcframework's ios-arm64 slice is FacePPlugin. -->
+    <framework src="src/ios/Frameworks/facerecognitionsdk.framework" custom="true" embed="true" link="true" />
+    <framework src="src/ios/Frameworks/FacePluginSDK.framework" custom="true" embed="true" link="true" />
+    <framework src="src/ios/Frameworks/FacePPlugin.framework" custom="true" embed="true" link="true" />
+    <framework src="src/ios/Frameworks/FaceDetect.framework" custom="true" embed="true" link="true" />
+
+    <framework src="UIKit.framework" />
+    <framework src="AVFoundation.framework" />
+    <framework src="Accelerate.framework" />
+    <framework src="libc++.tbd" />
+  </platform>
+</plugin>

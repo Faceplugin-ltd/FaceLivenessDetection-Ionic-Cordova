@@ -1,0 +1,94 @@
+/*
+ * The native app's palette, from
+ * Face-LivenessDetection-Android/app/src/main/res/values/colors.xml.
+ * Kept as exact hex so the Cordova demo matches the Android and iOS screens.
+ */
+:root {
+  --fp-bg: #0b0b12;
+  --fp-surface: #14141d;
+  --fp-surface-alt: #1b1b27;
+  --fp-text: #f2f0f7;
+  --fp-muted: #9b96ac;
+  --fp-accent: #a48cff;
+  --fp-accent-dim: #2a2140;
+  --fp-danger: #ff6b6b;
+  --fp-stroke: #262635;
+
+  --fp-brand-violet: #7c5cff;
+  --fp-brand-violet-deep: #4a2bb5;
+
+  --fp-status-error: #e5484d;
+  --fp-status-ok: #2ee6a6;
+  --fp-status-info: #5b8def;
+
+  /* bg_hero.xml */
+  --fp-hero-from: #241b46;
+  --fp-hero-to: #101019;
+
+  --ion-background-color: var(--fp-bg);
+  --ion-text-color: var(--fp-text);
+  --ion-toolbar-background: var(--fp-bg);
+  --ion-toolbar-color: var(--fp-text);
+}
+
+body {
+  background: var(--fp-bg);
+  color: var(--fp-text);
+}
+
+/* bg_card.xml / bg_tile_surface.xml — a surface card with a hairline stroke. */
+.fp-card {
+  background: var(--fp-surface);
+  border: 1px solid var(--fp-stroke);
+  border-radius: 20px;
+}
+
+.fp-hero {
+  background: linear-gradient(135deg, var(--fp-hero-from), var(--fp-hero-to));
+  border: 1px solid var(--fp-stroke);
+  border-radius: 28px;
+  padding: 22px 20px;
+}
+
+.fp-tile-primary {
+  background: linear-gradient(135deg, var(--fp-brand-violet), var(--fp-brand-violet-deep));
+  border-radius: 24px;
+}
+
+.fp-section {
+  color: var(--fp-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  margin: 22px 0 12px;
+}
+
+.fp-pill {
+  display: inline-block;
+  border-radius: 999px;
+  border: 1px solid;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fp-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.fp-bubble {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.fp-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}

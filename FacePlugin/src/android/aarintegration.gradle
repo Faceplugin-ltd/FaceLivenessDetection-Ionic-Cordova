@@ -1,0 +1,56 @@
+// Applied to the Cordova app module (plugin.xml, type="gradleReference").
+//
+// The plugin's Kotlin sources are compiled INTO the app module — Cordova has no library module of
+// its own — so the engine and everything the vendored native sources need is declared here.
+
+repositories {
+    google()
+    mavenCentral()
+    flatDir {
+        dirs 'src/main/libs'
+    }
+}
+
+dependencies {
+    // The engine (LX / Luxand build): the same AAR Face-LivenessDetection-Android links.
+    implementation(name: 'facerecognitionsdk', ext: 'aar')
+
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.24'
+
+    // The vendored kit binds CameraX for the preview and the frame analyzer.
+    def camerax = '1.4.2'
+    implementation "androidx.camera:camera-core:$camerax"
+    implementation "androidx.camera:camera-camera2:$camerax"
+    implementation "androidx.camera:camera-lifecycle:$camerax"
+    implementation "androidx.camera:camera-view:$camerax"
+}
+
+android {
+    // The vendored native sources are compiled for 17, as in the native app.
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+    buildTypes {
+        release {
+            proguardFiles += file('faceplugin-proguard-rules.pro')
+        }
+    }
+}
+
+// Match Kotlin JVM target to compileOptions above once the Kotlin plugin is on the classpath.
+// Do not reference org.jetbrains.* at script top-level — applied gradleReference scripts treat
+// bare `org` as a project property, and Class.forName fails before the Kotlin plugin loads.
+afterEvaluate {
+    tasks.matching { it.class.name == 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile' }.configureEach {
+        kotlinOptions {
+            jvmTarget = '17'
+        }
+    }
+}

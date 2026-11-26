@@ -1,0 +1,17 @@
+// Read by cordova-android from the app module.
+ext.cdvMinSdkVersion = 24
+
+android {
+    // The engine dlopens its native libraries by filesystem path under nativeLibraryDir, so they
+    // have to be extracted rather than loaded from the APK.
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+            pickFirsts += ['**/libc++_shared.so']
+        }
+    }
+    // frc.fpk must be stored (not deflated) for AAsset RANDOM/seek during model load.
+    androidResources {
+        noCompress += ['fpk']
+    }
+}
