@@ -12,7 +12,7 @@ app embeds. Four device frameworks belong here and none of them are in git:
 
 Get them from the
 [FaceRecognition-LivenessDetection-iOS release](https://github.com/Faceplugin-ltd/FaceRecognition-LivenessDetection-iOS/releases/tag/latest)
-(`runtime.zip` — unzip, then extract the `ios-arm64` slices from the xcframeworks). `python run_ios` copies the slices
+(`runtime.zip` — unzip, then extract the `ios-arm64` slices from the xcframeworks). `python run_ios.py` copies the slices
 automatically when the xcframeworks are present.
 
 The plugin's `hooks/ios_prepare.js` fails with a named list if any of them is absent, so a

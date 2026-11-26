@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * One-shot iOS setup: build the web app and the plugin's TypeScript, add the platform,
- * reinstall the local plugin, and prepare. After this, `python run_ios` / `npm run ios` deploys.
+ * reinstall the local plugin, and prepare. After this, `python run_ios.py` / `npm run ios` deploys.
  *
  * macOS only — Cordova's iOS platform needs Xcode.
  */
@@ -55,4 +55,4 @@ if (fs.existsSync(path.join(root, 'plugins', 'face-liveness-cordova'))) {
 }
 run('npx cordova plugin add ./FacePlugin --nofetch --nosave');
 run('npx cordova prepare ios');
-console.log('\niOS setup complete. Deploy with: python run_ios');
+console.log('\niOS setup complete. Deploy with: python run_ios.py');

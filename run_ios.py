@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Windows:  python run_ios          (prints that iOS needs a Mac)
-# macOS:    python3 run_ios   or  ./run_ios
+# Windows:  python run_ios.py          (prints that iOS needs a Mac)
+# macOS:    python3 run_ios.py   or  ./run_ios.py
 """Deploy the Face Liveness Cordova iOS demo to a plugged-in iPhone."""
 from __future__ import annotations
 
@@ -169,7 +169,7 @@ def install_and_launch(device: str) -> None:
 
 def main() -> None:
     if not IS_MAC:
-        die("iOS builds need macOS and Xcode. Use python run_android on this machine.")
+        die("iOS builds need macOS and Xcode. Use python run_android.py on this machine.")
     print(f"{ROOT.name}: ios (cordova)")
     npm = need("npm", "Install Node.js from https://nodejs.org/")
     npx = need("npx", "Install Node.js from https://nodejs.org/")
