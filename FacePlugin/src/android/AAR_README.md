@@ -3,7 +3,7 @@
 `facerecognitionsdk.aar` belongs in this directory and is **not in git** — it is around 80 MB.
 
 It is the same AAR [Face-LivenessDetection-Android](https://github.com/Faceplugin-ltd/FaceLivenessDetection-Android)
-links (`libs/facerecognitionsdk.aar`, the LX / Luxand engine build). Get it from that repository's
+links (`libs/facerecognitionsdk.aar`, the FacePlugin engine build). Get it from that repository's
 release and drop it here, then run:
 
 ```

@@ -46,7 +46,7 @@ FacePlugin screens, so the camera preview, the anti-spoofing gate, the shuffled 
 the progress ring and the result card are the same code that
 [FaceLivenessDetection-Android](https://github.com/Faceplugin-ltd/FaceLivenessDetection-Android)
 and [FaceLivenessDetection-iOS](https://github.com/Faceplugin-ltd/FaceLivenessDetection-iOS) run.
-The engine is the same binary too — `facerecognitionsdk`, built by the LX SDK.
+The engine is the same binary too — `facerecognitionsdk`.
 
 There is no camera in the WebView and no frames cross the bridge, which is why a call made in a
 browser deliberately **rejects** instead of returning a verdict: an anti-spoofing check that quietly

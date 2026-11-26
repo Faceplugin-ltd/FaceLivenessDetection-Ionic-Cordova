@@ -5,7 +5,7 @@ app embeds. Four device frameworks belong here and none of them are in git:
 
 | Bundle | What it is |
 | ------ | ---------- |
-| `facerecognitionsdk.framework` | The engine wrapper (LX / Luxand build) |
+| `facerecognitionsdk.framework` | The engine wrapper (FacePlugin engine build) |
 | `FacePluginSDK.framework` | Vendor runtime the wrapper links (ios-arm64 slice) |
 | `FacePPlugin.framework` | Vendor runtime — ios-arm64 slice inside `FacePlugin.xcframework` |
 | `FaceDetect.framework` | Vendor detector (ios-arm64 slice) |

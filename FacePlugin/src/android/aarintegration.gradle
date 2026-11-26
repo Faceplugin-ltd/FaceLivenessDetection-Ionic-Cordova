@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    // The engine (LX / Luxand build): the same AAR Face-LivenessDetection-Android links.
+    // The engine (FacePlugin engine build): the same AAR Face-LivenessDetection-Android links.
     implementation(name: 'facerecognitionsdk', ext: 'aar')
 
     implementation 'androidx.appcompat:appcompat:1.7.0'
