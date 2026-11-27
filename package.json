@@ -12,10 +12,7 @@
     "typecheck": "tsc --noEmit && tsc -p FacePlugin/tsconfig.json --noEmit",
     "plugin:build": "tsc -p FacePlugin/tsconfig.json",
     "postinstall": "npm run plugin:build",
-    "ensure-gradle": "node scripts/ensure-gradle.js",
-    "setup:android": "node scripts/with-gradle.js node scripts/setup-android.js",
-    "setup:ios": "node scripts/setup-ios.js",
-    "android": "npm run build && node scripts/with-gradle.js npx cordova prepare android && node scripts/with-gradle.js npx cordova run android --device",
+    "android": "npm run build && npx cordova prepare android && npx cordova run android --device",
     "ios": "npm run build && npx cordova prepare ios && npx cordova run ios --device"
   },
   "dependencies": {

@@ -159,24 +159,24 @@ before the build rather than as a link error. It also re-signs the frameworks in
 python run_android.py     # or: python run_ios.py on macOS
 ```
 
-The runner installs, places the engine if it can find it, adds the platform on the first run,
-prepares and starts the app. By hand:
+The runner downloads the engine if needed, then runs the usual Cordova steps. By hand:
 
 ```bash
 npm install
-npm run setup:android     # once: adds the platform, installs the plugin, prepares
-npm run android
+npx cordova platform add android          # once
+npx cordova plugin add ./FacePlugin --nofetch
+npm run android                           # build → cordova prepare → cordova run
 ```
 
 On macOS, put your Apple team id in `build.json`, then:
 
 ```bash
-npm run setup:ios
+npx cordova platform add ios              # once
+npx cordova plugin add ./FacePlugin --nofetch
 npm run ios
 ```
 
-`setup:android` runs through `scripts/with-gradle.js`, which fetches a known-good Gradle into
-`.tools/` if the one on `PATH` is too old for cordova-android 13.
+Cordova-android ships its own Gradle wrapper under `platforms/android/` — no separate Gradle install is required.
 
 | Platform | Identifier |
 | -------- | ---------- |

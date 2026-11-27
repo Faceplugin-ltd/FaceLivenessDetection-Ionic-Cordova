@@ -16,7 +16,7 @@
     <preference name="android-minSdkVersion" value="24" />
     <preference name="AndroidWindowSplashScreenBackground" value="#000000" />
     <preference name="BackgroundColor" value="0x00000000" />
-    <hook type="after_prepare" src="scripts/copy-android-icons.js" />
+    <hook type="after_prepare" src="hooks/copy-android-icons.js" />
     <platform name="android">
         <preference name="AndroidPersistentFileLocation" value="Compatibility" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
