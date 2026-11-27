@@ -18,11 +18,13 @@
 ## Quick start
 
 - [ ] Clone [FaceLivenessDetection-Ionic-Cordova](https://github.com/Faceplugin-ltd/FaceLivenessDetection-Ionic-Cordova)
-- [ ] `npm install` — the `postinstall` builds the plugin's TypeScript
-- [ ] Put the engine at `FacePlugin/src/android/facerecognitionsdk.aar` — [Get the engine](#get-the-engine)
-- [ ] On macOS, add the four iOS frameworks to `FacePlugin/src/ios/Frameworks/`
-- [ ] `npm run setup:android` once, then `npm run android` with a **physical** phone plugged in
+- [ ] Engine binaries (auto-downloaded by the runner, or place them yourself) — [Get the engine](#get-the-engine)
+- [ ] `python run_android.py` (or `python run_ios.py` on macOS) with a **physical** phone plugged in
 - [ ] Home status shows **Ready** → **Active liveness** / **Passive liveness** unlock
+
+That is the whole setup. The scripts do the rest: `npm install`, adding the platform on the first
+run, `cordova prepare`, the build, and the install onto the phone. They need Node 18+, JDK 17 and
+Cordova 12 (plus Xcode 15+ on macOS) on PATH, and stop with a named hint if anything is missing.
 
 ## Introduction
 
@@ -129,7 +131,7 @@ FacePlugin/src/android/facerecognitionsdk.aar
 
 Download it from the
 [FaceRecognition-LivenessDetection-Android release](https://github.com/Faceplugin-ltd/FaceRecognition-LivenessDetection-Android/releases/tag/latest),
-or copy it from `FaceLivenessDetection-Android/libs/`. `hooks/android_prepare.js` places it in
+or let `python run_android.py` download it from Releases. `hooks/android_prepare.js` places it in
 `platforms/android/app/src/main/libs/`, where `aarintegration.gradle` picks it up through a
 `flatDir` repository, and fails with a named message if it is absent.
 
@@ -152,6 +154,13 @@ before the build rather than as a link error. It also re-signs the frameworks in
 `.app`, which vendor frameworks need before a device will accept them.
 
 ## Run the demo
+
+```bash
+python run_android.py     # or: python run_ios.py on macOS
+```
+
+The runner installs, places the engine if it can find it, adds the platform on the first run,
+prepares and starts the app. By hand:
 
 ```bash
 npm install

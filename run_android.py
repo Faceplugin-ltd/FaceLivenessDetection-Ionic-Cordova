@@ -77,15 +77,10 @@ def copy_if_missing(src: Path, dest: Path) -> bool:
 
 
 def ensure_aar(dest: Path) -> None:
-    if dest.is_file():
-        return
-    apps = ROOT.parent
-    for src in (
-        apps / "Face-LivenessDetection-Android" / "libs" / "facerecognitionsdk.aar",
-    ):
-        if copy_if_missing(src, dest):
-            return
-    die(f"missing {dest}\nPlace facerecognitionsdk.aar there.")
+    import fp_releases
+
+    fp_releases.ensure_engine_aar(ROOT, dest)
+
 
 
 def adb_serial() -> str:
@@ -165,9 +160,13 @@ def rn_android() -> None:
 
 
 def maui_android() -> None:
+    import fp_releases
+
     dotnet = need("dotnet", "Install the .NET 8 SDK.")
     proj = ROOT / "src" / "FaceLiveness.Net.Maui" / "FaceLiveness.Net.Maui.csproj"
-    ensure_aar(proj.parent / "Platforms" / "Android" / "libs" / "facerecognitionsdk.aar")
+    libs = proj.parent / "Platforms" / "Android" / "libs"
+    ensure_aar(libs / "facerecognitionsdk.aar")
+    fp_releases.ensure_liveness_libs(ROOT, libs)
     adb_serial()
     run([dotnet, "build", str(proj), "-f", "net8.0-android", "-t:Run"], cwd=ROOT)
 

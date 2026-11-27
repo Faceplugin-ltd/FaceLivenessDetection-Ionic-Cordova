@@ -66,15 +66,9 @@ def copy_if_missing(src: Path, dest: Path) -> bool:
 
 
 def ensure_ios_runtimes() -> None:
-    FW_DEST.mkdir(parents=True, exist_ok=True)
-    if not (FW_DEST / "facerecognitionsdk.framework").is_dir():
-        if not all((IOS_APP / n).exists() for n in ENGINE_NAMES):
-            die(
-                f"missing iOS runtimes in {FW_DEST}\n"
-                f"Copy them from {IOS_APP}."
-            )
-        for n in ENGINE_NAMES:
-            copy_if_missing(IOS_APP / n, FW_DEST / n)
+    import fp_releases
+
+    fp_releases.ensure_ios_engine(ROOT, FW_DEST, with_bridge=False)
     # FacePlugin.xcframework's ios-arm64 slice is FacePPlugin — Cordova ld needs that name.
     for xc, fw_name in (
         ("FacePluginSDK.xcframework", "FacePluginSDK.framework"),
@@ -85,7 +79,9 @@ def ensure_ios_runtimes() -> None:
         copy_if_missing(slice_fw, FW_DEST / fw_name)
     missing = [n for n in ("facerecognitionsdk.framework", *DEVICE_SLICES) if not (FW_DEST / n).is_dir()]
     if missing:
-        die(f"missing device frameworks in {FW_DEST}:\n  " + "\n  ".join(missing))
+        die(f"missing device frameworks in {FW_DEST}:
+  " + "
+  ".join(missing))
 
 
 def ios_udid() -> str:
