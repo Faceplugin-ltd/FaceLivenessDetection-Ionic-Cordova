@@ -1,7 +1,43 @@
-// Read by cordova-android from the app module.
+// Read by cordova-android from the app module (always applied when this file exists).
+// CameraX + engine AAR must live here — not only in aarintegration.gradle — because a
+// prepare that never ran `cordova plugin add` leaves gradleReference unregistered while
+// the hook still syncs Kotlin sources into the app module.
 ext.cdvMinSdkVersion = 24
 
+repositories {
+    google()
+    mavenCentral()
+    flatDir {
+        dirs 'src/main/libs'
+    }
+}
+
+dependencies {
+    // The engine (FacePlugin engine build): the same AAR Face-LivenessDetection-Android links.
+    implementation(name: 'facerecognitionsdk', ext: 'aar')
+
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.24'
+
+    // The vendored kit binds CameraX for the preview and the frame analyzer.
+    def camerax = '1.4.2'
+    implementation "androidx.camera:camera-core:$camerax"
+    implementation "androidx.camera:camera-camera2:$camerax"
+    implementation "androidx.camera:camera-lifecycle:$camerax"
+    implementation "androidx.camera:camera-view:$camerax"
+}
+
 android {
+    // The vendored native sources are compiled for 17, as in the native app.
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
     // The engine dlopens its native libraries by filesystem path under nativeLibraryDir, so they
     // have to be extracted rather than loaded from the APK.
     packaging {
@@ -13,5 +49,19 @@ android {
     // frc.fpk must be stored (not deflated) for AAsset RANDOM/seek during model load.
     androidResources {
         noCompress += ['fpk']
+    }
+    buildTypes {
+        release {
+            proguardFiles += file('faceplugin-proguard-rules.pro')
+        }
+    }
+}
+
+// Match Kotlin JVM target to compileOptions above once the Kotlin plugin is on the classpath.
+afterEvaluate {
+    tasks.matching { it.class.name == 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile' }.configureEach {
+        kotlinOptions {
+            jvmTarget = '17'
+        }
     }
 }

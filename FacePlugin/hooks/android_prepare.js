@@ -113,6 +113,8 @@ function syncAndroidSources(projectRoot, androidDir) {
     const src = path.join(srcRoot, name);
     if (!fs.existsSync(src)) continue;
     if (fs.existsSync(path.dirname(pluginRoot))) copyFile(src, path.join(pluginRoot, name));
+    // build-extras.gradle is always applied by cordova-android's app/build.gradle.
+    // Keep CameraX + flatDir AAR deps there so a half-installed plugin still compiles.
     if (name !== 'aarintegration.gradle') {
       copyFile(src, path.join(androidDir, 'app', name));
     }
@@ -127,15 +129,15 @@ function syncAndroidSources(projectRoot, androidDir) {
 /** The engine AAR, which is far too large for git and so is not a tracked resource-file. */
 function requireEngine(projectRoot, androidDir) {
   const src = path.join(projectRoot, 'FacePlugin', 'src', 'android', 'facerecognitionsdk.aar');
-  if (!fs.existsSync(src)) {
+  if (!fs.existsSync(src) || fs.statSync(src).size === 0) {
     throw new Error(
       [
         `${TAG} missing the Face Liveness Android runtime:`,
         '  FacePlugin/src/android/facerecognitionsdk.aar',
         '',
-        'It is the same AAR Face-LivenessDetection-Android links. Get it from the',
-        'FaceLivenessDetection-Android release and drop it in FacePlugin/src/android/,',
-        'then run `cordova prepare android` again.',
+        'Run `python run_android.py` (downloads from GitHub Releases) or place',
+        'facerecognitionsdk.aar from FaceRecognition-LivenessDetection-Android',
+        'Releases into FacePlugin/src/android/, then prepare again.',
       ].join('\n')
     );
   }

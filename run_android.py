@@ -133,28 +133,37 @@ def ionic_android() -> None:
     run([npx(), "cap", "run", "android", "--no-sync", "--target", target], cwd=example)
 
 
+def cordova_plugin_registered(plugin_id: str) -> bool:
+    """True when cordova-android recorded the plugin (gradleReference applied)."""
+    android_json = ROOT / "platforms" / "android" / "android.json"
+    if not android_json.is_file():
+        return False
+    try:
+        data = json.loads(android_json.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    return plugin_id in (data.get("installed_plugins") or {})
+
+
 def cordova_android() -> None:
     npm_install(ROOT)
     ensure_aar(ROOT / "FacePlugin" / "src" / "android" / "facerecognitionsdk.aar")
-    # platforms/ is gitignored — first deploy needs setup:android.
-    if not (ROOT / "platforms" / "android").is_dir():
+    # platforms/ is gitignored. Also re-run setup when plugins/ exists but the
+    # platform never registered the plugin (CameraX / AAR classpath missing).
+    if not (ROOT / "platforms" / "android").is_dir() or not cordova_plugin_registered(
+        "face-liveness-cordova"
+    ):
         run([npm(), "run", "setup:android"], cwd=ROOT)
     run([npm(), "run", "android"], cwd=ROOT)
 
 
 def rn_android() -> None:
+    # Shared template path (this Cordova repo never hits it).
     example = ROOT / "example"
     npm_install(ROOT)
     npm_install(example)
     ensure_aar(example / "android" / "libfacesdk" / "facerecognitionsdk.aar")
     ensure_aar(ROOT / "android" / "libs" / "facerecognitionsdk.aar")
-    ps1 = example / "scripts" / "build-android-windows.ps1"
-    if IS_WIN and ps1.is_file() and len(str(ROOT)) > 90:
-        run(["powershell", "-ExecutionPolicy", "Bypass", "-File", str(ps1)])
-        apk = Path(r"C:\fp-rn\example\android\app\build\outputs\apk\debug\app-debug.apk")
-        if apk.is_file():
-            run([need("adb", "Install Android platform-tools."), "install", "-r", str(apk)])
-            return
     serial = adb_serial()
     run([npx(), "react-native", "run-android", "--deviceId", serial], cwd=example)
 

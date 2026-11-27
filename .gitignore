@@ -32,6 +32,10 @@ FacePlugin/src/ios/Frameworks/*.framework/
 FacePlugin/src/ios/Frameworks/*.xcframework/
 !FacePlugin/src/ios/Frameworks/README.md
 
+# Python
+__pycache__/
+*.py[cod]
+
 # Env
 .env
 .env.*

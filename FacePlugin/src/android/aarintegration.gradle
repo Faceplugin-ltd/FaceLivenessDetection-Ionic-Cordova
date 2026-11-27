@@ -2,6 +2,7 @@
 //
 // The plugin's Kotlin sources are compiled INTO the app module — Cordova has no library module of
 // its own — so the engine and everything the vendored native sources need is declared here.
+// build-extras.gradle carries the same deps as a fallback when gradleReference was never registered.
 
 repositories {
     google()
