@@ -16,7 +16,7 @@
     "setup:android": "node scripts/with-gradle.js node scripts/setup-android.js",
     "setup:ios": "node scripts/setup-ios.js",
     "android": "npm run build && node scripts/with-gradle.js npx cordova prepare android && node scripts/with-gradle.js npx cordova run android --device",
-    "ios": "npm run build && npx cordova prepare ios && npx cordova run ios --device"
+    "ios": "node scripts/run-ios.js"
   },
   "dependencies": {
     "@ionic/react": "^8.4.1",

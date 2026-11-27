@@ -171,8 +171,12 @@ On macOS, put your Apple team id in `build.json`, then:
 
 ```bash
 npm run setup:ios                         # once — platform + plugin + prepare
-npm run ios
+npm run ios                               # builds, then installs via xcrun devicectl
 ```
+
+`npm run ios` does **not** use `cordova run` / `ios-deploy` (those miss CoreDevice /
+wireless phones and fall back to the simulator). It builds with Cordova, finds the
+connected iPhone via `xctrace`/`devicectl`, and installs/launches the exported `.ipa`.
 
 `npm run android` bootstraps Gradle when needed (`scripts/with-gradle.js`: system PATH, then the Gradle wrapper cache, then a portable copy under `.tools/`). Cordova needs a Gradle binary on PATH to create the platform wrapper the first time.
 
