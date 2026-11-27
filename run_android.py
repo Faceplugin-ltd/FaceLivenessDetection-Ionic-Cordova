@@ -55,30 +55,16 @@ def plugin_registered() -> bool:
     return PLUGIN_ID in (data.get("installed_plugins") or {})
 
 
-def ensure_android_platform(npx: str) -> None:
-    """cordova platform add + local plugin (once / when android.json is incomplete)."""
-    run([need("npm", "Install Node.js"), "run", "build"])
-    run([need("npm", "Install Node.js"), "run", "plugin:build"])
-    if not (ROOT / "platforms" / "android").is_dir():
-        run([npx, "cordova", "platform", "add", "android"])
-    plugins = ROOT / "plugins" / PLUGIN_ID
-    if plugins.is_dir():
-        run([npx, "cordova", "plugin", "remove", PLUGIN_ID, "--nosave"])
-    run([npx, "cordova", "plugin", "add", "./FacePlugin", "--nofetch", "--nosave"])
-    run([npx, "cordova", "prepare", "android"])
-
-
 def main() -> None:
     import fp_releases
 
     npm = need("npm", "Install Node.js from https://nodejs.org/")
-    npx = need("npx", "Install Node.js from https://nodejs.org/")
     print(f"{ROOT.name}: android (cordova)")
     fp_releases.ensure_engine_aar(ROOT, AAR)
     if not (ROOT / "node_modules").is_dir():
         run([npm, "install"])
     if not (ROOT / "platforms" / "android").is_dir() or not plugin_registered():
-        ensure_android_platform(npx)
+        run([npm, "run", "setup:android"])
     run([npm, "run", "android"])
 
 

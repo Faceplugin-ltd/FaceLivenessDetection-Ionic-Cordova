@@ -163,20 +163,18 @@ The runner downloads the engine if needed, then runs the usual Cordova steps. By
 
 ```bash
 npm install
-npx cordova platform add android          # once
-npx cordova plugin add ./FacePlugin --nofetch
+npm run setup:android                     # once — platform + plugin + prepare
 npm run android                           # build → cordova prepare → cordova run
 ```
 
 On macOS, put your Apple team id in `build.json`, then:
 
 ```bash
-npx cordova platform add ios              # once
-npx cordova plugin add ./FacePlugin --nofetch
+npm run setup:ios                         # once — platform + plugin + prepare
 npm run ios
 ```
 
-Cordova-android ships its own Gradle wrapper under `platforms/android/` — no separate Gradle install is required.
+`npm run android` bootstraps Gradle when needed (`scripts/with-gradle.js`: system PATH, then the Gradle wrapper cache, then a portable copy under `.tools/`). Cordova needs a Gradle binary on PATH to create the platform wrapper the first time.
 
 | Platform | Identifier |
 | -------- | ---------- |
